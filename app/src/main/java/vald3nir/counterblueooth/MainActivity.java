@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.androidannotations.annotations.AfterViews;
@@ -29,16 +30,17 @@ public class MainActivity extends AppCompatActivity {
     @ViewById
     TextView logDispositivos;
 
+    @ViewById
+    ProgressBar progress;
+
 
     @Click(R.id.pesquisar)
     public void onClick(View v) {
 
         logDispositivos.setText("");
         numDispostivos.setText("");
-
+        progress.setVisibility(View.VISIBLE);
         bluetoothDevices = new ArrayList<>();
-        logDispositivos.append("Adapter: " + bluetoothAdapter);
-
         CheckBTState();
     }
 
@@ -58,14 +60,12 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 
         registerReceiver(ActionFoundReceiver, filter);
-
-
     }
 
     @AfterViews
     public void afterViews() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        logDispositivos.append("Adapter: " + bluetoothAdapter);
+        progress.setVisibility(View.VISIBLE);
         CheckBTState();
     }
 
@@ -81,9 +81,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        if (bluetoothAdapter != null)
+        if (bluetoothAdapter != null) {
             bluetoothAdapter.cancelDiscovery();
-
+            bluetoothAdapter.disable();
+        }
         unregisterReceiver(ActionFoundReceiver);
     }
 
@@ -91,12 +92,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (bluetoothAdapter == null) {
 
-            logDispositivos.append("\n\nBluetooth NOT supported. Aborting.");
+            logDispositivos.append("Bluetooth NOT supported. Aborting.");
 
         } else {
 
             if (bluetoothAdapter.isEnabled()) {
-                logDispositivos.append("\n\nBluetooth is enabled...");
+                logDispositivos.append("Bluetooth is enabled...");
 
                 bluetoothAdapter.startDiscovery();
 
@@ -143,28 +144,13 @@ public class MainActivity extends AppCompatActivity {
                         if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 
                             logDispositivos.append("\n\nDiscovery Finished");
+                            progress.setVisibility(View.INVISIBLE);
                             numDispostivos.setText(bluetoothDevices.size() + "");
 
-//                            for (BluetoothDevice device : bluetoothDevices) {
-//
-//                                logDispositivos.append("\nGetting Services for " + device.getName() + ", " + device);
-//
-//                                if (!device.fetchUuidsWithSdp()) {
-//                                    logDispositivos.append("\nSDP Failed for " + device.getName());
-//                                }
-//                            }
                         }
                     }
-
-
                 }
-
-
             }
-
-
         }
     };
-
-
 }

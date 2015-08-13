@@ -7,14 +7,12 @@
 
     <TextView
         android:id="@+id/titulo"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Número de Dispositivos:"
         android:textSize="20sp" />
 
-
     <TextView
-        android:textColor="#ff0000"
         android:id="@+id/numDispostivos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,6 +20,7 @@
         android:layout_alignBottom="@+id/titulo"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:textColor="#ff0000"
         android:textSize="20sp" />
 
     <Button
@@ -32,6 +31,14 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/titulo"
         android:text="Pesquisar" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_above="@+id/pesquisar"
+        android:layout_toLeftOf="@+id/numDispostivos"
+        android:layout_toStartOf="@+id/numDispostivos" />
 
     <ScrollView
         android:layout_width="match_parent"
